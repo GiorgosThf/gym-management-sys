@@ -21,7 +21,7 @@ export function AdminDashboard() {
         { name: 'Users', href: 'users', icon: UserPen },
         { name: 'Trainers', href: 'trainers', icon: Users },
         { name: 'Programs', href: 'programs', icon: Dumbbell },
-        { name: 'Schedule', href: 'schedule', icon: Calendar },
+        { name: 'Session', href: 'schedule', icon: Calendar },
         { name: 'Announcements', href: 'announcements', icon: Bell },
     ]
 

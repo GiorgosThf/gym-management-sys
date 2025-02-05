@@ -48,7 +48,7 @@ export function Announcements() {
                 setIsAddModalOpen(false)
                 setNewAnnouncement({ title: '', content: '', type: 'NEWS' })
             })
-            .catch((err) => setError(err.message || 'An error occurred'))
+            .catch((error) => setError(error.message))
     }
 
     const handleEditSubmit = async (e: React.FormEvent) => {
@@ -60,7 +60,7 @@ export function Announcements() {
                 setIsEditModalOpen(false)
                 setEditingAnnouncement(null)
             })
-            .catch((err) => setError(err.message || 'An error occurred'))
+            .catch((error) => setError(error.message))
     }
 
     const confirmDelete = (announcementId: string) => {
@@ -71,7 +71,7 @@ export function Announcements() {
     const handleDelete = async () => {
         await deleteAnnouncement(selectedAnnouncementId)
             .then(() => fetchAnnouncements())
-            .catch((err) => setError(err.message || 'An error occurred'))
+            .catch((error) => setError(error.message))
             .finally(() => setIsPopupOpen(false))
     }
 

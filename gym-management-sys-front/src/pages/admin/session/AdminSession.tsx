@@ -8,6 +8,7 @@ import { ProgramService } from '../../../services/ProgramService.ts'
 import { SessionService } from '../../../services/SessionService.ts'
 import { TrainerService } from '../../../services/TrainerService.ts'
 import { PaginationControls } from '../../../components/pagination/PaginationControls.tsx'
+import PopupModal from '../../../components/popup/PopUpModal.tsx'
 
 export function AdminSession() {
     const [session, setSession] = React.useState<Session[]>([])
@@ -21,7 +22,8 @@ export function AdminSession() {
     const [currentPage, setCurrentPage] = React.useState(0)
     const [pageSize] = React.useState(10)
     const [totalPages, setTotalPages] = React.useState(0)
-
+    const[isPopupOpen, setIsPopupOpen] = React.useState(false);
+    const[selectedSessionId, setSelectedSessionId] = React.useState('');
     const [formData, setFormData] = React.useState<{
         program: Program | null
         trainer: Trainer | null
@@ -113,13 +115,18 @@ export function AdminSession() {
             .catch((error) => setError(error.message))
     }
 
-    const handleDelete = async (scheduleId: string) => {
-        if (!window.confirm('Are you sure you want to deleteById this schedule?')) return
-
-        await deleteById(scheduleId)
-            .then(() => fetchData)
-            .catch((error) => setError(error.message))
+    const confirmDelete = (sessionId: string) => {
+        setSelectedSessionId(sessionId)
+        setIsPopupOpen(true)
     }
+
+    const handleDelete = async () => {
+        await deleteById(selectedSessionId)
+            .then(fetchData)
+            .catch((error) => setError(error.message))
+            .finally(() => setIsPopupOpen(false))
+    }
+
 
     if (loading) {
         return (
@@ -233,7 +240,7 @@ export function AdminSession() {
                                         Edit
                                     </button>
                                     <button
-                                        onClick={() => handleDelete(schedule.id)}
+                                        onClick={() => confirmDelete(schedule.id)}
                                         className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                                     >
                                         <Trash2 className="h-4 w-4 mr-1" />
@@ -253,6 +260,16 @@ export function AdminSession() {
                     totalPages={totalPages}
                 />
             </div>
+            <PopupModal
+                title="Confirm Deletion"
+                message="Are you sure you want to delete this session?"
+                isOpen={isPopupOpen}
+                onClose={() => setIsPopupOpen(false)}
+                onConfirm={handleDelete}
+                confirmText="Delete"
+                cancelText="Cancel"
+                type="confirmation"
+            />
 
             {/* Add/Edit AdminSession Modal */}
             {isAdding && (

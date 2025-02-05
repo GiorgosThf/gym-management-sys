@@ -3,6 +3,7 @@ import { Program } from '../../../types'
 import { Plus, Edit2, Trash2, Users, Clock } from 'lucide-react'
 import { ProgramService } from '../../../services/ProgramService.ts'
 import { PaginationControls } from '../../../components/pagination/PaginationControls.tsx'
+import PopupModal from '../../../components/popup/PopUpModal.tsx'
 
 export function AdminPrograms() {
     const [programs, setPrograms] = React.useState<Program[]>([])
@@ -14,7 +15,8 @@ export function AdminPrograms() {
     const [isAdding, setIsAdding] = React.useState(false)
     const [isEditing, setIsEditing] = React.useState(false)
     const [editingProgram, setEditingProgram] = React.useState<Program | null>(null)
-
+    const[isPopupOpen, setIsPopupOpen] = React.useState(false);
+    const[selectedProgramId, setSelectedProgramId] = React.useState('');
     const [formData, setFormData] = React.useState<{
         id: string
         name: string
@@ -81,7 +83,7 @@ export function AdminPrograms() {
                 fetchPrograms()
                 setIsAdding(false)
             })
-            .catch(setError)
+            .catch((error) => setError(error.message))
             .finally(() => setTimeout(() => setLoading(false), 200))
     }
 
@@ -96,17 +98,24 @@ export function AdminPrograms() {
                 setIsEditing(false)
                 setEditingProgram(null)
             })
-            .catch(setError)
+            .catch((error) => setError(error.message))
             .finally(() => setLoading(false))
     }
 
-    // Handle Delete Program
-    const handleDelete = async (programId: string) => {
+    const confirmDelete = (programId: string) => {
+        setSelectedProgramId(programId)
+        setIsPopupOpen(true)
+    }
+
+    const handleDelete = async () => {
         setLoading(true)
-        await deleteProgram(programId)
+        await deleteProgram(selectedProgramId)
             .then(fetchPrograms)
-            .catch(setError)
-            .finally(() => setLoading(false))
+            .catch((error) => setError(error.message))
+            .finally(() => {
+                setLoading(false)
+                setIsPopupOpen(false)
+            })
     }
 
     if (loading) {
@@ -183,7 +192,7 @@ export function AdminPrograms() {
                                     Edit
                                 </button>
                                 <button
-                                    onClick={() => handleDelete(program.id)}
+                                    onClick={() => confirmDelete(program.id)}
                                     className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                                 >
                                     <Trash2 className="h-4 w-4 mr-1" />
@@ -202,6 +211,16 @@ export function AdminPrograms() {
                     totalPages={totalPages}
                 />
             </div>
+            <PopupModal
+                title="Confirm Deletion"
+                message="Are you sure you want to delete this program?"
+                isOpen={isPopupOpen}
+                onClose={() => setIsPopupOpen(false)}
+                onConfirm={handleDelete}
+                confirmText="Delete"
+                cancelText="Cancel"
+                type="confirmation"
+            />
 
             {/* Add/Edit Program Modal */}
             {isAdding && (
@@ -294,7 +313,6 @@ export function AdminPrograms() {
                                     type="button"
                                     onClick={() => {
                                         setIsAdding(false)
-                                        setEditingProgram(null)
                                     }}
                                     className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                 >
