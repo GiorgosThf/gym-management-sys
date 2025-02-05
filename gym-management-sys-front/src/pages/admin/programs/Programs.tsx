@@ -15,8 +15,8 @@ export function AdminPrograms() {
     const [isAdding, setIsAdding] = React.useState(false)
     const [isEditing, setIsEditing] = React.useState(false)
     const [editingProgram, setEditingProgram] = React.useState<Program | null>(null)
-    const[isPopupOpen, setIsPopupOpen] = React.useState(false);
-    const[selectedProgramId, setSelectedProgramId] = React.useState('');
+    const [isPopupOpen, setIsPopupOpen] = React.useState(false)
+    const [selectedProgramId, setSelectedProgramId] = React.useState('')
     const [formData, setFormData] = React.useState<{
         id: string
         name: string

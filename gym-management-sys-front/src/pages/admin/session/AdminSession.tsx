@@ -22,8 +22,8 @@ export function AdminSession() {
     const [currentPage, setCurrentPage] = React.useState(0)
     const [pageSize] = React.useState(10)
     const [totalPages, setTotalPages] = React.useState(0)
-    const[isPopupOpen, setIsPopupOpen] = React.useState(false);
-    const[selectedSessionId, setSelectedSessionId] = React.useState('');
+    const [isPopupOpen, setIsPopupOpen] = React.useState(false)
+    const [selectedSessionId, setSelectedSessionId] = React.useState('')
     const [formData, setFormData] = React.useState<{
         program: Program | null
         trainer: Trainer | null
@@ -126,7 +126,6 @@ export function AdminSession() {
             .catch((error) => setError(error.message))
             .finally(() => setIsPopupOpen(false))
     }
-
 
     if (loading) {
         return (
@@ -428,7 +427,7 @@ export function AdminSession() {
                             <div className="flex justify-end gap-3 mt-6">
                                 <button
                                     type="button"
-                                    onClick={() => setIsEditing(false)}
+                                    onClick={() => setIsAdding(false)}
                                     className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                 >
                                     Cancel
