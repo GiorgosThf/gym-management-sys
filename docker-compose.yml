@@ -1,0 +1,52 @@
+version: '3.8'
+
+networks:
+  gym_network:
+    driver: bridge
+
+services:
+  db:
+    image: postgres
+    container_name: gym_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: gymuser
+      POSTGRES_PASSWORD: gymsecret
+      POSTGRES_DB: gymdb
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - gym_network
+
+  backend:
+    build: ./gym-management-sys-back
+    container_name: gym_spring_app
+    restart: always
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/gymdb
+      SPRING_DATASOURCE_USERNAME: gymuser
+      SPRING_DATASOURCE_PASSWORD: gymsecret
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8080:8080"
+    networks:
+      - gym_network
+
+  frontend:
+    build: ./gym-management-sys-front
+    container_name: gym_react_app
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+    networks:
+      - gym_network
+
+volumes:
+  postgres-data:
