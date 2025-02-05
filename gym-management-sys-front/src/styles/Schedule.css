@@ -1,0 +1,70 @@
+.schedule-container {
+    height: 100%;
+    padding: 1rem;
+}
+
+.schedule-header {
+    margin-bottom: 2rem;
+}
+
+.schedule-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.error-message {
+    background-color: #fee2e2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+    padding: 1rem;
+    border-radius: 0.375rem;
+    margin-bottom: 1rem;
+}
+
+.calendar-wrapper {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+}
+
+/* Calendar Event Styles */
+.calendar-event {
+    background-color: #4f46e5 !important;
+    border: none !important;
+    border-radius: 0.25rem;
+    color: white !important;
+    padding: 0.25rem 0.5rem;
+}
+
+/* Calendar Header Styles */
+.rbc-header {
+    padding: 0.75rem;
+    font-weight: 500;
+    background-color: #f9fafb;
+}
+
+/* Today's Date Highlight */
+.rbc-today {
+    background-color: #eef2ff !important;
+}
+
+/* Time Grid Styles */
+.rbc-time-content {
+    border: 1px solid #e5e7eb;
+}
+
+.rbc-time-header-content {
+    border: 1px solid #e5e7eb;
+}
+
+/* Event Tooltip */
+.rbc-event-label {
+    font-size: 0.75rem;
+}
+
+.rbc-event-content {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
