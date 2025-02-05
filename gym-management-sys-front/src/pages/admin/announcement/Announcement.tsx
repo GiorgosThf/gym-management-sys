@@ -105,7 +105,7 @@ export function Announcements() {
                 </div>
             )}
 
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-2">
+            <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-2">
                 {announcements.map((announcement) => (
                     <div key={announcement.id} className="announcement-card">
                         <div className="card-content">

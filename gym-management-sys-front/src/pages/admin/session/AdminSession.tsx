@@ -161,7 +161,7 @@ export function AdminSession() {
                 </div>
             )}
 
-            <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-2">
                 {session.map((schedule) => {
                     const program = schedule.program
                     const trainer = schedule.trainer
