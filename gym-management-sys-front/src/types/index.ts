@@ -13,6 +13,9 @@ export interface User {
 export interface AdminActivity {
     id: string
     type:
+        | 'TRAINER_ADDED'
+        | 'TRAINER_UPDATED'
+        | 'TRAINER_DELETED'
         | 'USER_REGISTERED'
         | 'USER_UPDATED'
         | 'USER_DELETED'

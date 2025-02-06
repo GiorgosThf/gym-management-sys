@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS public.activities
     type      varchar(255)
         constraint activities_type_check
             check ((type)::text = ANY
-                   (ARRAY [('USER_REGISTERED'::character varying)::text, ('USER_UPDATED'::character varying)::text, ('USER_DELETED'::character varying)::text, ('BOOKING_MADE'::character varying)::text, ('BOOKING_CANCELLED'::character varying)::text, ('PROGRAM_ADDED'::character varying)::text, ('PROGRAM_UPDATED'::character varying)::text, ('PROGRAM_DELETED'::character varying)::text, ('ANNOUNCEMENT_UPDATED'::character varying)::text, ('ANNOUNCEMENT_DELETED'::character varying)::text, ('ANNOUNCEMENT_POSTED'::character varying)::text]))
+                   (ARRAY [('TRAINER_ADDED'::character varying)::text,('TRAINER_UPDATED'::character varying)::text,('TRAINER_DELETED'::character varying)::text,('USER_REGISTERED'::character varying)::text, ('USER_UPDATED'::character varying)::text, ('USER_DELETED'::character varying)::text, ('BOOKING_MADE'::character varying)::text, ('BOOKING_CANCELLED'::character varying)::text, ('PROGRAM_ADDED'::character varying)::text, ('PROGRAM_UPDATED'::character varying)::text, ('PROGRAM_DELETED'::character varying)::text, ('ANNOUNCEMENT_UPDATED'::character varying)::text, ('ANNOUNCEMENT_DELETED'::character varying)::text, ('ANNOUNCEMENT_POSTED'::character varying)::text]))
 );
 
 ALTER TABLE public.activities
@@ -252,6 +252,27 @@ $$;
 
 ALTER PROCEDURE public.cancel_booking(bigint, bigint, timestamp) owner to gymuser;
 
+CREATE OR REPLACE FUNCTION public.log_trainer_activity() returns trigger
+    language plpgsql
+as
+$$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        INSERT INTO activities (type, message, metadata, timestamp)
+        VALUES ('TRAINER_ADDED', 'A trainer was created', json_build_object('trainerId', NEW.id, 'trainerEmail', NEW.email), CURRENT_TIMESTAMP);
+    ELSIF TG_OP = 'UPDATE' THEN
+        INSERT INTO activities (type, message, metadata, timestamp)
+        VALUES ('TRAINER_UPDATED', 'A trainer was updated', json_build_object('trainerId', NEW.id, 'trainerEmail', NEW.email), CURRENT_TIMESTAMP);
+    ELSIF TG_OP = 'DELETE' THEN
+        INSERT INTO activities (type, message, metadata, timestamp)
+        VALUES ('TRAINER_DELETED', 'A trainer was deleted', json_build_object('trainerId', OLD.id, 'trainerEmail', OLD.email), CURRENT_TIMESTAMP);
+    END IF;
+    RETURN NEW;
+END;
+$$;
+
+ALTER FUNCTION public.log_trainer_activity() owner to gymuser;
+
 CREATE OR REPLACE FUNCTION public.log_booking_activity() returns trigger
     language plpgsql
 as
@@ -409,6 +430,24 @@ create trigger trigger_log_announcement_activity_delete
     on public.announcements
     for each row
 execute procedure public.log_announcement_activity();
+
+create trigger trigger_log_trainer_activity_insert
+    after insert
+    on public.trainers
+    for each row
+execute procedure public.log_trainer_activity();
+
+create trigger trigger_log_trainer_activity_update
+    after update
+    on public.trainers
+    for each row
+execute procedure public.log_trainer_activity();
+
+create trigger trigger_log_trainer_activity_delete
+    after delete
+    on public.trainers
+    for each row
+execute procedure public.log_trainer_activity();
 
 
 -- Insert Initial Users

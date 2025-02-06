@@ -1,5 +1,5 @@
 import React from 'react'
-import { Users, Dumbbell, Calendar, Bell } from 'lucide-react'
+import {Users, Dumbbell, Calendar, Bell, Users2} from 'lucide-react'
 import { StatsService } from '../../../services/StatsService.ts'
 import { AdminActivity } from '../../../types'
 import { PaginationControls } from '../../../components/pagination/PaginationControls.tsx'
@@ -37,6 +37,10 @@ export function AdminOverview() {
 
     const getActivityIcon = (type: AdminActivity['type']) => {
         switch (type) {
+            case 'TRAINER_ADDED':
+            case 'TRAINER_UPDATED':
+            case 'TRAINER_DELETED':
+                return <Users2 className="h-5 w-5 text-blue-500" />
             case 'USER_REGISTERED':
             case 'USER_UPDATED':
             case 'USER_DELETED':

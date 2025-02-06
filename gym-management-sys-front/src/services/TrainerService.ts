@@ -30,7 +30,7 @@ export const TrainerService = () => {
 
         deleteTrainer: async (trainerId: string) => {
             return api.delete(`/trainers/${trainerId}`, true).then(async (response) => {
-                return await response.json()
+                return response;
             })
         },
     }

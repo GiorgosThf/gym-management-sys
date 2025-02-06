@@ -1,29 +1,67 @@
 package gr.digital.systems.gym.management.back.types;
 
-/** The enum Activity type. */
+/**
+ * The enum Activity type.
+ */
 public enum ActivityType {
-	/** Program added activity type. */
+	/**
+	 * Trainer added activity type.
+	 */
+	TRAINER_ADDED,
+	/**
+	 * Trainer deleted activity type.
+	 */
+	TRAINER_DELETED,
+	/**
+	 * Trainer updated activity type.
+	 */
+	TRAINER_UPDATED,
+	/**
+	 * Program added activity type.
+	 */
 	PROGRAM_ADDED,
-	/** Program updated activity type. */
+	/**
+	 * Program updated activity type.
+	 */
 	PROGRAM_UPDATED,
-	/** Program deleted activity type. */
+	/**
+	 * Program deleted activity type.
+	 */
 	PROGRAM_DELETED,
-	/** User registered activity type. */
+	/**
+	 * User registered activity type.
+	 */
 	USER_REGISTERED,
-	/** User updated activity type. */
+	/**
+	 * User updated activity type.
+	 */
 	USER_UPDATED,
-	/** User deleted activity type. */
+	/**
+	 * User deleted activity type.
+	 */
 	USER_DELETED,
-	/** Booking made activity type. */
+	/**
+	 * Booking made activity type.
+	 */
 	BOOKING_MADE,
-	/** Booking deleted activity type. */
+	/**
+	 * Booking deleted activity type.
+	 */
 	BOOKING_DELETED,
-	/** Booking cancelled activity type. */
+	/**
+	 * Booking cancelled activity type.
+	 */
 	BOOKING_CANCELLED,
-	/** Announcement updated activity type. */
+	/**
+	 * Announcement updated activity type.
+	 */
 	ANNOUNCEMENT_UPDATED,
-	/** Announcement deleted activity type. */
+	/**
+	 * Announcement deleted activity type.
+	 */
 	ANNOUNCEMENT_DELETED,
-	/** Announcement posted activity type. */
+	/**
+	 * Announcement posted activity type.
+	 */
 	ANNOUNCEMENT_POSTED;
 }

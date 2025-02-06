@@ -1,7 +1,8 @@
 import React from 'react'
-import { Trainer } from '../../../types'
-import { Mail, Award, UserCog, Search } from 'lucide-react'
+import {Trainer} from '../../../types'
+import {Mail, Award, UserCog, Search, Plus, Trash2} from 'lucide-react'
 import { TrainerService } from '../../../services/TrainerService.ts'
+import PopupModal from "../../../components/popup/PopUpModal.tsx";
 
 export function Trainers() {
     const [trainers, setTrainers] = React.useState<Trainer[]>([])
@@ -9,10 +10,30 @@ export function Trainers() {
     const [error, setError] = React.useState('')
     const [searchTerm, setSearchTerm] = React.useState('')
     const [editingTrainer, setEditingTrainer] = React.useState<Trainer | null>(null)
+    const [isAdding, setIsAdding] = React.useState(false)
+    const [isEditing, setIsEditing] = React.useState(false)
+    const [isPopupOpen, setIsPopupOpen] = React.useState(false)
+    const [selectedTrainerId, setSelectedTrainerId] = React.useState('')
+    const [formData, setFormData] = React.useState<{
+        email: string
+        firstName: string
+        lastName: string
+        specialization: string
+        bio: string
+        enabled: boolean
+    }>({
+        email: '',
+        firstName: '',
+        lastName: '',
+        specialization: '',
+        bio: '',
+        enabled: true
+    })
 
-    const { getTrainers, updateTrainer } = TrainerService()
+    const { getTrainers, updateTrainer, createTrainer, deleteTrainer } = TrainerService()
 
     const fetchTrainers = async () => {
+        setError('');
         await getTrainers()
             .then(setTrainers)
             .catch((error) => setError(error.message))
@@ -23,13 +44,58 @@ export function Trainers() {
         fetchTrainers().then()
     }, [])
 
-    const handleUpdateTrainer = async (userId: string, updates: Partial<Trainer>) => {
-        await updateTrainer(userId, updates)
+    const handleAddNew = () => {
+        setEditingTrainer(null)
+        setFormData({
+            email: '',
+            firstName: '',
+            lastName: '',
+            specialization: '',
+            bio: '',
+            enabled: true
+        })
+        setIsAdding(true)
+    }
+
+    const handleEdit = (trainer: Trainer) => {
+        setEditingTrainer(trainer)
+        setIsEditing(true)
+    }
+
+    const handleSubmitAdd = async (e: React.FormEvent) => {
+        e.preventDefault()
+
+        await createTrainer(formData)
             .then(() => {
                 fetchTrainers()
+                setIsAdding(false)
+            })
+            .catch((error) => setError(error.message))
+    }
+
+    const handleSubmitEdit = async (e: React.FormEvent) => {
+        e.preventDefault()
+
+        if (!editingTrainer) return
+
+        await updateTrainer(editingTrainer.id, editingTrainer)
+            .then(() => {
+                fetchTrainers()
+                setIsEditing(false)
                 setEditingTrainer(null)
             })
             .catch((error) => setError(error.message))
+    }
+    const confirmDelete = (trainerId: string) => {
+        setSelectedTrainerId(trainerId)
+        setIsPopupOpen(true)
+    }
+
+    const handleDeleteTrainer = async () => {
+        await deleteTrainer(selectedTrainerId)
+            .then(fetchTrainers)
+            .catch((error) => setError(error.message))
+            .finally(() => setIsPopupOpen(false))
     }
 
     const filteredTrainers = trainers.filter(
@@ -54,6 +120,15 @@ export function Trainers() {
                     <h1 className="text-2xl font-semibold text-gray-900">Trainers</h1>
                     <p className="mt-2 text-sm text-gray-700">Manage all trainers in the system</p>
                 </div>
+                <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+                    <button
+                        onClick={handleAddNew}
+                        className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
+                    >
+                        <Plus className="h-4 w-4 mr-2"/>
+                        Add Trainer
+                    </button>
+                </div>
             </div>
 
             {error && (
@@ -65,7 +140,7 @@ export function Trainers() {
             <div className="mt-4">
                 <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Search className="h-5 w-5 text-gray-400" />
+                        <Search className="h-5 w-5 text-gray-400"/>
                     </div>
                     <input
                         type="text"
@@ -155,10 +230,16 @@ export function Trainers() {
                                             <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                                                 <div className="flex justify-end gap-2">
                                                     <button
-                                                        onClick={() => setEditingTrainer(trainer)}
+                                                        onClick={() => handleEdit(trainer)}
                                                         className="text-indigo-600 hover:text-indigo-900"
                                                     >
-                                                        <UserCog className="h-5 w-5" />
+                                                        <UserCog className="h-5 w-5"/>
+                                                    </button>
+                                                    <button
+                                                        onClick={() => confirmDelete(trainer.id)}
+                                                        className="text-red-600 hover:text-red-900"
+                                                    >
+                                                        <Trash2 className="h-5 w-5"/>
                                                     </button>
                                                 </div>
                                             </td>
@@ -171,13 +252,263 @@ export function Trainers() {
                 </div>
             </div>
 
-            {/* Edit User Modal */}
-            {editingTrainer && (
+            <PopupModal
+                title="Confirm Deletion"
+                message="Are you sure you want to delete this user?"
+                isOpen={isPopupOpen}
+                onClose={() => setIsPopupOpen(false)}
+                onConfirm={handleDeleteTrainer}
+                confirmText="Delete"
+                cancelText="Cancel"
+                type="confirmation"
+            />
+
+            {/* Add/Edit AdminSession Modal */}
+            {isAdding && (
                 <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4">
                     <div className="bg-white rounded-lg max-w-md w-full p-6">
-                        <h3 className="text-lg font-medium text-gray-900 mb-4">Edit User</h3>
-                        <div className="space-y-4">
-                            <div>
+                        <h3 className="text-lg font-medium text-gray-900 mb-4">
+                            Add New Trainer
+                        </h3>
+                        <form onSubmit={handleSubmitAdd} className="space-y-4">
+                            <div className="form-group">
+                                <label
+                                    htmlFor="program-name-edit"
+                                    className="block text-sm font-medium text-gray-700"
+                                >
+                                    First Name
+                                </label>
+                                <input
+                                    id="program-name-edit"
+                                    type="text"
+                                    value={formData.firstName}
+                                    onChange={(e) =>
+                                        setFormData({...formData, firstName: e.target.value})
+                                    }
+                                    className="form-input"
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label
+                                    htmlFor="program-name-edit"
+                                    className="block text-sm font-medium text-gray-700"
+                                >
+                                    Last Name
+                                </label>
+                                <input
+                                    id="program-name-edit"
+                                    type="text"
+                                    value={formData.lastName}
+                                    onChange={(e) =>
+                                        setFormData({...formData, lastName: e.target.value})
+                                    }
+                                    className="form-input"
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label
+                                    htmlFor="program-name-edit"
+                                    className="block text-sm font-medium text-gray-700"
+                                >
+                                    Email
+                                </label>
+                                <input
+                                    id="program-name-edit"
+                                    type="text"
+                                    value={formData.email}
+                                    onChange={(e) =>
+                                        setFormData({...formData, email: e.target.value})
+                                    }
+                                    className="form-input"
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label
+                                    htmlFor="program-name-edit"
+                                    className="block text-sm font-medium text-gray-700"
+                                >
+                                    Specialization
+                                </label>
+                                <input
+                                    id="program-name-edit"
+                                    type="text"
+                                    value={formData.specialization}
+                                    onChange={(e) =>
+                                        setFormData({...formData, specialization: e.target.value})
+                                    }
+                                    className="form-input"
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label
+                                    htmlFor="program-name-edit"
+                                    className="block text-sm font-medium text-gray-700"
+                                >
+                                    Bio
+                                </label>
+                                <input
+                                    id="program-name-edit"
+                                    type="text"
+                                    value={formData.bio}
+                                    onChange={(e) =>
+                                        setFormData({...formData, bio: e.target.value})
+                                    }
+                                    className="form-input"
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label className="block text-sm font-medium text-gray-700">
+                                    Status
+                                </label>
+                                <select
+                                    value={formData.enabled ? 'true' : 'false'}
+                                    onChange={(e) =>
+                                        setFormData({
+                                            ...formData,
+                                            enabled: e.target.value === 'true',
+                                        })
+                                    }
+                                    className="form-input"
+                                >
+                                    <option value="true">Enabled</option>
+                                    <option value="false">Disabled</option>
+                                </select>
+                            </div>
+
+                            <div className="flex justify-end gap-3 mt-6">
+                                <button
+                                    type="button"
+                                    onClick={() => {setIsAdding(false); setFormData({
+                                        email: '',
+                                        firstName: '',
+                                        lastName: '',
+                                        specialization: '',
+                                        bio: '',
+                                        enabled: true
+                                    })}}
+                                    className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                >
+                                    Add Trainer
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {isEditing && editingTrainer &&(
+                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-lg max-w-md w-full p-6">
+                        <h3 className="text-lg font-medium text-gray-900 mb-4">
+                            Edit Trainer
+                        </h3>
+                        <form onSubmit={handleSubmitEdit} className="space-y-4">
+                            <div className="form-group">
+                                <label
+                                    htmlFor="program-name-edit"
+                                    className="block text-sm font-medium text-gray-700"
+                                >
+                                    First Name
+                                </label>
+                                <input
+                                    id="program-name-edit"
+                                    type="text"
+                                    value={editingTrainer.firstName}
+                                    onChange={(e) =>
+                                        setEditingTrainer({...editingTrainer, firstName: e.target.value})
+                                    }
+                                    className="form-input"
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label
+                                    htmlFor="program-name-edit"
+                                    className="block text-sm font-medium text-gray-700"
+                                >
+                                    Last Name
+                                </label>
+                                <input
+                                    id="program-name-edit"
+                                    type="text"
+                                    value={editingTrainer.lastName}
+                                    onChange={(e) =>
+                                        setEditingTrainer({...editingTrainer, lastName: e.target.value})
+                                    }
+                                    className="form-input"
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label
+                                    htmlFor="program-name-edit"
+                                    className="block text-sm font-medium text-gray-700"
+                                >
+                                    Email
+                                </label>
+                                <input
+                                    id="program-name-edit"
+                                    type="text"
+                                    value={editingTrainer.email}
+                                    onChange={(e) =>
+                                        setEditingTrainer({...editingTrainer, email: e.target.value})
+                                    }
+                                    className="form-input"
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label
+                                    htmlFor="program-name-edit"
+                                    className="block text-sm font-medium text-gray-700"
+                                >
+                                    Specialization
+                                </label>
+                                <input
+                                    id="program-name-edit"
+                                    type="text"
+                                    value={editingTrainer.specialization}
+                                    onChange={(e) =>
+                                        setEditingTrainer({...editingTrainer, specialization: e.target.value})
+                                    }
+                                    className="form-input"
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label
+                                    htmlFor="program-name-edit"
+                                    className="block text-sm font-medium text-gray-700"
+                                >
+                                    Bio
+                                </label>
+                                <input
+                                    id="program-name-edit"
+                                    type="text"
+                                    value={editingTrainer.bio}
+                                    onChange={(e) =>
+                                        setEditingTrainer({...editingTrainer, bio: e.target.value})
+                                    }
+                                    className="form-input"
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
                                 <label className="block text-sm font-medium text-gray-700">
                                     Status
                                 </label>
@@ -189,7 +520,7 @@ export function Trainers() {
                                             enabled: e.target.value === 'true',
                                         })
                                     }
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    className="form-input"
                                 >
                                     <option value="true">Enabled</option>
                                     <option value="false">Disabled</option>
@@ -197,29 +528,23 @@ export function Trainers() {
                             </div>
                             <div className="flex justify-end gap-3 mt-6">
                                 <button
-                                    onClick={() => setEditingTrainer(null)}
+                                    type="button"
+                                    onClick={() => {
+                                        setIsEditing(false);
+                                        setEditingTrainer(null)
+                                    }}
                                     className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                 >
                                     Cancel
                                 </button>
                                 <button
-                                    onClick={() =>
-                                        handleUpdateTrainer(editingTrainer.id, {
-                                            id: editingTrainer?.id,
-                                            email: editingTrainer?.email,
-                                            firstName: editingTrainer?.firstName,
-                                            lastName: editingTrainer?.lastName,
-                                            specialization: editingTrainer?.specialization,
-                                            bio: editingTrainer?.bio,
-                                            enabled: editingTrainer?.enabled,
-                                        })
-                                    }
+                                    type="submit"
                                     className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                 >
                                     Save Changes
                                 </button>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             )}

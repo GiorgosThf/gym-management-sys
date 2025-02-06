@@ -22,7 +22,7 @@ export const UserService = () => {
 
         deleteUser: async (userId: string) => {
             return api.delete(`/users/${userId}`, true).then(async (response) => {
-                return await response.json()
+                return response;
             })
         },
     }
