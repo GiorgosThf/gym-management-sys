@@ -67,6 +67,7 @@ export function Programs() {
                 setNavigateToDash(true)
             })
             .catch((error) => {
+                console.log(error.message)
                 setError(error.message)
                 setNavigateToDash(false)
                 setIsModalOpen(false)

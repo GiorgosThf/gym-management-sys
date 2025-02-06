@@ -13,7 +13,7 @@ export const intercept = {
             .then(async (response) => {
                 if (!response.ok) {
                     const json = await response.json()
-                    throw new Error(json.description)
+                    throw new Error(json.description || json.message)
                 }
                 return response
             })
