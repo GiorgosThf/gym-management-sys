@@ -224,7 +224,7 @@ export function AdminPrograms() {
 
             {/* Add/Edit Program Modal */}
             {isAdding && (
-                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4">
+                <div className="fixed z-50 inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4">
                     <div className="bg-white rounded-lg max-w-md w-full p-6">
                         <h3 className="text-lg font-medium text-gray-900 mb-4">Add New Program</h3>
                         <form onSubmit={handleSubmitAdd} className="space-y-4">
@@ -330,7 +330,7 @@ export function AdminPrograms() {
                 </div>
             )}
             {isEditing && (
-                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4">
+                <div className="fixed z-50 inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4">
                     <div className="bg-white rounded-lg max-w-md w-full p-6">
                         <h3 className="text-lg font-medium text-gray-900 mb-4">Edit Program</h3>
                         <form onSubmit={handleSubmitEdit} className="space-y-4">

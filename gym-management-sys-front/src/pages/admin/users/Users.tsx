@@ -4,6 +4,7 @@ import {Mail, MapPin, UserCog, Trash2, Search, Loader2} from 'lucide-react'
 import { UserService } from '../../../services/UserService.ts'
 import PopupModal from "../../../components/popup/PopUpModal.tsx";
 import {LocationService} from "../../../services/LocationService.ts";
+import {createPortal} from "react-dom";
 
 export function Users() {
     const [users, setUsers] = React.useState<User[]>([])
@@ -255,8 +256,8 @@ export function Users() {
             />
 
             {/* Edit User Modal */}
-            {editingUser && (
-                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4">
+            {editingUser && createPortal(
+                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 z-50 flex items-center justify-center p-4">
                     <div className="bg-white rounded-lg max-w-md w-full p-6">
                         <h3 className="text-lg font-medium text-gray-900 mb-4">Edit User</h3>
                         <div className="space-y-4">
@@ -419,7 +420,7 @@ export function Users() {
                         </div>
                     </div>
                 </div>
-            )}
+                , document.body)}
         </div>
     )
 }

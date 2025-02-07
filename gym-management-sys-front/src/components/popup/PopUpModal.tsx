@@ -26,7 +26,7 @@ const PopupModal: React.FC<PopupModalProps> = ({
     if (!isOpen) return null
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+        <div className="fixed z-50 inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
             <div className="bg-white p-6 rounded-lg shadow-lg w-96">
                 <h2
                     className={`text-lg font-semibold ${type === 'error' ? 'text-red-600' : 'text-gray-800'}`}

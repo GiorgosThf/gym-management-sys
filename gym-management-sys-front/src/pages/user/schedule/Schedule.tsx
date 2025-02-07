@@ -6,6 +6,7 @@ import '../../../styles/Schedule.css'
 import { useAuthStore } from '../../../store/authStore.ts'
 import moment from 'moment/moment'
 import { BookingService } from '../../../services/BookingService.ts'
+import {CalendarCheck2, Clock, Dumbbell, User} from "lucide-react";
 const localizer = momentLocalizer(moment)
 
 export function UserSchedule() {
@@ -74,35 +75,57 @@ export function UserSchedule() {
                 />
             </div>
             {isModalOpen && selectedSession && (
-                <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-50">
+                    {/* Modal Container */}
                     <div className="bg-white rounded-lg max-w-md w-full p-6 shadow-lg">
-                        <h3 className="text-lg font-medium text-gray-900 mb-4">Session Details</h3>
-                        <div className="text-gray-700 space-y-2">
-                            <p>
-                                <strong>Program:</strong> {selectedSession.session.program?.name}
-                            </p>
-                            <p>
-                                <strong>Date:</strong> {selectedSession.session.date}
-                            </p>
-                            <p>
-                                <strong>Time:</strong> {selectedSession.session.startTime} -{' '}
-                                {selectedSession.session.endTime}
-                            </p>
-                            <p>
-                                <strong>Trainer:</strong>{' '}
-                                {selectedSession.session.trainer?.firstName}{' '}
-                                {selectedSession.session.trainer?.lastName}
-                            </p>
-                            <p>
-                                <strong>Capacity:</strong> {selectedSession.session.currentBookings}{' '}
-                                / {selectedSession.session.maxCapacity}
-                            </p>
+                        {/* Modal Header */}
+                        <h3 className="text-xl font-semibold text-gray-900 mb-4 text-center flex items-center justify-center gap-2">
+                            <Dumbbell className="h-6 w-6 text-indigo-600" /> Session Details
+                        </h3>
+
+                        {/* Session Info */}
+                        <div className="text-gray-700 space-y-4">
+                            <div className="flex items-center justify-between">
+                    <span className="flex items-center gap-2 font-semibold text-gray-800">
+                        <Dumbbell className="h-5 w-5 text-indigo-600" /> Program:
+                    </span>
+                                <span className="text-indigo-600">{selectedSession.session.program?.name}</span>
+                            </div>
+
+                            <div className="flex items-center justify-between">
+                    <span className="flex items-center gap-2 font-semibold text-gray-800">
+                        <CalendarCheck2 className="h-5 w-5 text-indigo-600" /> Date:
+                    </span>
+                                <span>{selectedSession.session.date}</span>
+                            </div>
+
+                            <div className="flex items-center justify-between">
+                    <span className="flex items-center gap-2 font-semibold text-gray-800">
+                        <Clock className="h-5 w-5 text-indigo-600" /> Time:
+                    </span>
+                                <span>
+                        {selectedSession.session.startTime} - {selectedSession.session.endTime}
+                    </span>
+                            </div>
+
+                            <div className="flex items-center justify-between">
+                    <span className="flex items-center gap-2 font-semibold text-gray-800">
+                        <User className="h-5 w-5 text-indigo-600" /> Trainer:
+                    </span>
+                                <span>
+                        {selectedSession.session.trainer?.firstName} {selectedSession.session.trainer?.lastName}
+                    </span>
+                            </div>
+
+
                         </div>
-                        <div className="flex justify-end gap-3 mt-6">
+
+                        {/* Action Buttons */}
+                        <div className="flex justify-center mt-6">
                             <button
                                 type="button"
                                 onClick={() => setIsModalOpen(false)}
-                                className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                className="px-5 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex items-center gap-2"
                             >
                                 Close
                             </button>

@@ -168,7 +168,7 @@ export function Announcements() {
 
             {/* Add Announcement Modal */}
             {isAddModalOpen && (
-                <div className="modal">
+                <div className="modal z-50">
                     <div className="modal-content">
                         <h3 className="modal-header">Add New Announcement</h3>
                         <form onSubmit={handleAddSubmit} className="modal-form">
@@ -230,7 +230,7 @@ export function Announcements() {
             )}
             {/* Add Announcement Modal */}
             {isEditModalOpen && (
-                <div className="modal">
+                <div className="modal z-50">
                     <div className="modal-content">
                         <h3 className="modal-header">Edit Announcement</h3>
                         <form onSubmit={handleEditSubmit} className="modal-form">

@@ -5,6 +5,8 @@ import gr.digital.systems.gym.management.back.exception.ManagementSystemExceptio
 import gr.digital.systems.gym.management.back.transfer.ApiError;
 import io.jsonwebtoken.ExpiredJwtException;
 import java.util.NoSuchElementException;
+
+import io.jsonwebtoken.JwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
@@ -170,6 +172,26 @@ public class ExceptionHandlerConfig {
 	 * @return the response entity
 	 */
 	@ExceptionHandler(ExpiredJwtException.class)
+	protected ResponseEntity<ApiError> handleJwtExpiredException(
+			final HttpMessageNotReadableException ex, final WebRequest webRequest) {
+		LOG.error("JwtException Expired caught: {}", ex.getMessage());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(
+						ApiError.builder()
+								.description(ex.getMessage())
+								.httpStatus(HttpStatus.BAD_REQUEST.value())
+								.path(webRequest.getDescription(false))
+								.build());
+	}
+
+	/**
+	 * Handle jwt exception response entity.
+	 *
+	 * @param ex the ex
+	 * @param webRequest the web request
+	 * @return the response entity
+	 */
+	@ExceptionHandler(JwtException.class)
 	protected ResponseEntity<ApiError> handleJwtException(
 			final HttpMessageNotReadableException ex, final WebRequest webRequest) {
 		LOG.error("JwtException caught: {}", ex.getMessage());
