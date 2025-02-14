@@ -66,7 +66,7 @@ export function UserOverview() {
             color: 'green',
         },
         {
-            name: 'Completed Programs',
+            name: 'Completed Sessions',
             value: stats.completedPrograms,
             icon: Award,
             color: 'purple',

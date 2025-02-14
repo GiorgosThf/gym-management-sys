@@ -164,7 +164,7 @@ export function UserProfile() {
                             >
                                 <option value="">Select a country</option>
                                 {countries.map((country) => (
-                                    <option key={country.iso2} value={country.name}>
+                                    <option key={country.iso3} value={country.name}>
                                         {country.name}
                                     </option>
                                 ))}

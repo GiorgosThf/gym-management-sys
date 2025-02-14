@@ -1,8 +1,8 @@
 import React from 'react'
-import {Trainer} from '../../../types'
-import {Mail, Award, UserCog, Search, Plus, Trash2} from 'lucide-react'
+import { Trainer } from '../../../types'
+import { Mail, Award, UserCog, Search, Plus, Trash2 } from 'lucide-react'
 import { TrainerService } from '../../../services/TrainerService.ts'
-import PopupModal from "../../../components/popup/PopUpModal.tsx";
+import PopupModal from '../../../components/popup/PopUpModal.tsx'
 
 export function Trainers() {
     const [trainers, setTrainers] = React.useState<Trainer[]>([])
@@ -27,13 +27,13 @@ export function Trainers() {
         lastName: '',
         specialization: '',
         bio: '',
-        enabled: true
+        enabled: true,
     })
 
     const { getTrainers, updateTrainer, createTrainer, deleteTrainer } = TrainerService()
 
     const fetchTrainers = async () => {
-        setError('');
+        setError('')
         await getTrainers()
             .then(setTrainers)
             .catch((error) => setError(error.message))
@@ -52,7 +52,7 @@ export function Trainers() {
             lastName: '',
             specialization: '',
             bio: '',
-            enabled: true
+            enabled: true,
         })
         setIsAdding(true)
     }
@@ -125,7 +125,7 @@ export function Trainers() {
                         onClick={handleAddNew}
                         className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
                     >
-                        <Plus className="h-4 w-4 mr-2"/>
+                        <Plus className="h-4 w-4 mr-2" />
                         Add Trainer
                     </button>
                 </div>
@@ -140,7 +140,7 @@ export function Trainers() {
             <div className="mt-4">
                 <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Search className="h-5 w-5 text-gray-400"/>
+                        <Search className="h-5 w-5 text-gray-400" />
                     </div>
                     <input
                         type="text"
@@ -233,13 +233,13 @@ export function Trainers() {
                                                         onClick={() => handleEdit(trainer)}
                                                         className="text-indigo-600 hover:text-indigo-900"
                                                     >
-                                                        <UserCog className="h-5 w-5"/>
+                                                        <UserCog className="h-5 w-5" />
                                                     </button>
                                                     <button
                                                         onClick={() => confirmDelete(trainer.id)}
                                                         className="text-red-600 hover:text-red-900"
                                                     >
-                                                        <Trash2 className="h-5 w-5"/>
+                                                        <Trash2 className="h-5 w-5" />
                                                     </button>
                                                 </div>
                                             </td>
@@ -267,9 +267,7 @@ export function Trainers() {
             {isAdding && (
                 <div className="fixed z-50 inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4">
                     <div className="bg-white rounded-lg max-w-md w-full p-6">
-                        <h3 className="text-lg font-medium text-gray-900 mb-4">
-                            Add New Trainer
-                        </h3>
+                        <h3 className="text-lg font-medium text-gray-900 mb-4">Add New Trainer</h3>
                         <form onSubmit={handleSubmitAdd} className="space-y-4">
                             <div className="form-group">
                                 <label
@@ -283,7 +281,7 @@ export function Trainers() {
                                     type="text"
                                     value={formData.firstName}
                                     onChange={(e) =>
-                                        setFormData({...formData, firstName: e.target.value})
+                                        setFormData({ ...formData, firstName: e.target.value })
                                     }
                                     className="form-input"
                                     required
@@ -301,7 +299,7 @@ export function Trainers() {
                                     type="text"
                                     value={formData.lastName}
                                     onChange={(e) =>
-                                        setFormData({...formData, lastName: e.target.value})
+                                        setFormData({ ...formData, lastName: e.target.value })
                                     }
                                     className="form-input"
                                     required
@@ -319,7 +317,7 @@ export function Trainers() {
                                     type="text"
                                     value={formData.email}
                                     onChange={(e) =>
-                                        setFormData({...formData, email: e.target.value})
+                                        setFormData({ ...formData, email: e.target.value })
                                     }
                                     className="form-input"
                                     required
@@ -338,7 +336,7 @@ export function Trainers() {
                                     type="text"
                                     value={formData.specialization}
                                     onChange={(e) =>
-                                        setFormData({...formData, specialization: e.target.value})
+                                        setFormData({ ...formData, specialization: e.target.value })
                                     }
                                     className="form-input"
                                     required
@@ -357,7 +355,7 @@ export function Trainers() {
                                     type="text"
                                     value={formData.bio}
                                     onChange={(e) =>
-                                        setFormData({...formData, bio: e.target.value})
+                                        setFormData({ ...formData, bio: e.target.value })
                                     }
                                     className="form-input"
                                     required
@@ -385,14 +383,17 @@ export function Trainers() {
                             <div className="flex justify-end gap-3 mt-6">
                                 <button
                                     type="button"
-                                    onClick={() => {setIsAdding(false); setFormData({
-                                        email: '',
-                                        firstName: '',
-                                        lastName: '',
-                                        specialization: '',
-                                        bio: '',
-                                        enabled: true
-                                    })}}
+                                    onClick={() => {
+                                        setIsAdding(false)
+                                        setFormData({
+                                            email: '',
+                                            firstName: '',
+                                            lastName: '',
+                                            specialization: '',
+                                            bio: '',
+                                            enabled: true,
+                                        })
+                                    }}
                                     className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                 >
                                     Cancel
@@ -409,12 +410,10 @@ export function Trainers() {
                 </div>
             )}
 
-            {isEditing && editingTrainer &&(
+            {isEditing && editingTrainer && (
                 <div className="fixed inset-0 z-50 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4">
                     <div className="bg-white rounded-lg max-w-md w-full p-6">
-                        <h3 className="text-lg font-medium text-gray-900 mb-4">
-                            Edit Trainer
-                        </h3>
+                        <h3 className="text-lg font-medium text-gray-900 mb-4">Edit Trainer</h3>
                         <form onSubmit={handleSubmitEdit} className="space-y-4">
                             <div className="form-group">
                                 <label
@@ -428,7 +427,10 @@ export function Trainers() {
                                     type="text"
                                     value={editingTrainer.firstName}
                                     onChange={(e) =>
-                                        setEditingTrainer({...editingTrainer, firstName: e.target.value})
+                                        setEditingTrainer({
+                                            ...editingTrainer,
+                                            firstName: e.target.value,
+                                        })
                                     }
                                     className="form-input"
                                     required
@@ -446,7 +448,10 @@ export function Trainers() {
                                     type="text"
                                     value={editingTrainer.lastName}
                                     onChange={(e) =>
-                                        setEditingTrainer({...editingTrainer, lastName: e.target.value})
+                                        setEditingTrainer({
+                                            ...editingTrainer,
+                                            lastName: e.target.value,
+                                        })
                                     }
                                     className="form-input"
                                     required
@@ -464,7 +469,10 @@ export function Trainers() {
                                     type="text"
                                     value={editingTrainer.email}
                                     onChange={(e) =>
-                                        setEditingTrainer({...editingTrainer, email: e.target.value})
+                                        setEditingTrainer({
+                                            ...editingTrainer,
+                                            email: e.target.value,
+                                        })
                                     }
                                     className="form-input"
                                     required
@@ -483,7 +491,10 @@ export function Trainers() {
                                     type="text"
                                     value={editingTrainer.specialization}
                                     onChange={(e) =>
-                                        setEditingTrainer({...editingTrainer, specialization: e.target.value})
+                                        setEditingTrainer({
+                                            ...editingTrainer,
+                                            specialization: e.target.value,
+                                        })
                                     }
                                     className="form-input"
                                     required
@@ -502,7 +513,10 @@ export function Trainers() {
                                     type="text"
                                     value={editingTrainer.bio}
                                     onChange={(e) =>
-                                        setEditingTrainer({...editingTrainer, bio: e.target.value})
+                                        setEditingTrainer({
+                                            ...editingTrainer,
+                                            bio: e.target.value,
+                                        })
                                     }
                                     className="form-input"
                                     required
@@ -530,7 +544,7 @@ export function Trainers() {
                                 <button
                                     type="button"
                                     onClick={() => {
-                                        setIsEditing(false);
+                                        setIsEditing(false)
                                         setEditingTrainer(null)
                                     }}
                                     className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"

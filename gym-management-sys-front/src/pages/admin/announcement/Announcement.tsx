@@ -1,12 +1,10 @@
 import React from 'react'
 import { Announcement } from '../../../types'
 import { Plus, Edit2, Trash2, Bell, Clock } from 'lucide-react'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
-import { format, parseISO } from 'date-fns'
 import { AnnouncementService } from '../../../services/AnnouncementService.ts'
 import PopupModal from '../../../components/popup/PopUpModal.tsx'
 import '../../../styles/Announcement.css'
+import { formatDateDefault } from '../../../utils/time.utils.ts'
 
 export function Announcements() {
     const [announcements, setAnnouncements] = React.useState<Announcement[]>([])
@@ -123,7 +121,9 @@ export function Announcements() {
                                 <div className="flex items-center text-sm text-gray-500">
                                     <Clock className="h-4 w-4 mr-1" />
                                     <span>
-                                        {format(parseISO(announcement.createdAt), 'MMMM d, yyyy')}
+                                        {formatDateDefault(
+                                            announcement.createdAt?.toLocaleString() ?? ''
+                                        )}
                                     </span>
                                 </div>
                             </div>

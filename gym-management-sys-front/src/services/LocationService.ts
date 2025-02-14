@@ -7,7 +7,7 @@ export const LocationService = () => {
     return {
         getCountries: async (): Promise<Country[]> => {
             return api
-                .get('https://countriesnow.space/api/v0.1/countries/info?returns=name,iso2', false)
+                .get('https://countriesnow.space/api/v0.1/countries/info?returns=name,iso3', false)
                 .then(async (response: Response) => {
                     return await response.json().then((data) => {
                         return data.data

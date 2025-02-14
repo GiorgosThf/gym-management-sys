@@ -1,5 +1,5 @@
 import React from 'react'
-import {Users, Dumbbell, Calendar, Bell, Users2} from 'lucide-react'
+import { Users, Dumbbell, Calendar, Bell, Users2 } from 'lucide-react'
 import { StatsService } from '../../../services/StatsService.ts'
 import { AdminActivity } from '../../../types'
 import { PaginationControls } from '../../../components/pagination/PaginationControls.tsx'

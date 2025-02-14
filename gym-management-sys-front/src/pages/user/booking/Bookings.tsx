@@ -3,11 +3,9 @@ import { Booking } from '../../../types'
 import { useAuthStore } from '../../../store/authStore.ts'
 import { BookingService } from '../../../services/BookingService.ts'
 import { Calendar, Clock, MapPin, X } from 'lucide-react'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
-import { format, parseISO } from 'date-fns'
 import PopupModal from '../../../components/popup/PopUpModal.tsx'
 import './Bookings.css'
+import { formatDateByType, formatTimeDefault } from '../../../utils/time.utils.ts'
 
 export function UserBookings() {
     const [bookings, setBookings] = React.useState<Booking[]>([])
@@ -77,14 +75,15 @@ export function UserBookings() {
                                     <div className="detail-item">
                                         <Calendar className="detail-icon" />
                                         <span>
-                                            {format(parseISO(booking.session.date), 'MMMM d, yyyy')}
+                                            {formatDateByType(booking.session.date, 'MMMM d, yyyy')}
                                         </span>
                                     </div>
 
                                     <div className="detail-item">
                                         <Clock className="detail-icon" />
                                         <span>
-                                            {booking.session.startTime} - {booking.session.endTime}
+                                            {formatTimeDefault(booking.session.startTime)} -{' '}
+                                            {formatTimeDefault(booking.session.endTime)}
                                         </span>
                                     </div>
 

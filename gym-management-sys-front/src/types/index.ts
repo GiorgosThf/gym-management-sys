@@ -57,7 +57,7 @@ export interface UserActivity {
 
 export interface Country {
     name: string
-    iso2: string
+    iso3: string
 }
 export interface Cities {
     data: string[]

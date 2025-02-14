@@ -1,6 +1,7 @@
 import React from 'react'
 import { Announcement } from '../../../types'
 import { AnnouncementService } from '../../../services/AnnouncementService.ts'
+import { formatDateByType } from '../../../utils/time.utils.ts'
 
 export function UserAnnouncements() {
     const [announcements, setAnnouncements] = React.useState<Announcement[]>([])
@@ -44,7 +45,11 @@ export function UserAnnouncements() {
                         <h3 className="font-semibold text-lg">{announcement.title}</h3>
                         <p>{announcement.content}</p>
                         <small>
-                            Posted on: {new Date(announcement.createdAt ?? '').toLocaleDateString()}
+                            Posted on:{' '}
+                            {formatDateByType(
+                                announcement.createdAt?.toLocaleString() ?? '',
+                                'd/M/yyyy'
+                            )}
                         </small>
                     </div>
                 ))}

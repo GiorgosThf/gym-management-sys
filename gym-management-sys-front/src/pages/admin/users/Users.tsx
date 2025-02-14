@@ -1,10 +1,10 @@
 import React from 'react'
-import {Country, User} from '../../../types'
-import {Mail, MapPin, UserCog, Trash2, Search, Loader2} from 'lucide-react'
+import { Country, User } from '../../../types'
+import { Mail, MapPin, UserCog, Trash2, Search, Loader2 } from 'lucide-react'
 import { UserService } from '../../../services/UserService.ts'
-import PopupModal from "../../../components/popup/PopUpModal.tsx";
-import {LocationService} from "../../../services/LocationService.ts";
-import {createPortal} from "react-dom";
+import PopupModal from '../../../components/popup/PopUpModal.tsx'
+import { LocationService } from '../../../services/LocationService.ts'
+import { createPortal } from 'react-dom'
 
 export function Users() {
     const [users, setUsers] = React.useState<User[]>([])
@@ -12,8 +12,8 @@ export function Users() {
         countries: true,
         cities: false,
         submit: false,
-    });
-    const[usersLoading, setUsersLoading] = React.useState(true);
+    })
+    const [usersLoading, setUsersLoading] = React.useState(true)
     const [error, setError] = React.useState('')
     const [searchTerm, setSearchTerm] = React.useState('')
     const [editingUser, setEditingUser] = React.useState<User | null>(null)
@@ -31,11 +31,10 @@ export function Users() {
             .then(setUsers)
             .catch((error) => setError(error.message))
             .finally(() => setUsersLoading(false))
-
     }
 
     React.useEffect(() => {
-        fetchUsers().then();
+        fetchUsers().then()
     }, [])
 
     React.useEffect(() => {
@@ -87,7 +86,6 @@ export function Users() {
             .then(fetchUsers)
             .catch((error) => setError(error.message))
             .finally(() => setIsPopupOpen(false))
-
     }
 
     const filteredUsers = users.filter(
@@ -256,171 +254,190 @@ export function Users() {
             />
 
             {/* Edit User Modal */}
-            {editingUser && createPortal(
-                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 z-50 flex items-center justify-center p-4">
-                    <div className="bg-white rounded-lg max-w-md w-full p-6">
-                        <h3 className="text-lg font-medium text-gray-900 mb-4">Edit User</h3>
-                        <div className="space-y-4">
-                            <div className="form-group">
-                                <label htmlFor="firstName">First Name</label>
-                                <input
-                                    id="firstName"
-                                    type="text"
-                                    value={editingUser.firstName}
-                                    onChange={(e) =>
-                                        setEditingUser({...editingUser, firstName: e.target.value})
-                                    }
-                                    className="form-input"
-                                    required
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="lastName">Last Name</label>
-                                <input
-                                    id="lastName"
-                                    type="text"
-                                    value={editingUser.lastName}
-                                    onChange={(e) =>
-                                        setEditingUser({...editingUser, lastName: e.target.value})
-                                    }
-                                    className="form-input"
-                                    required
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="email">Email</label>
-                                <input
-                                    id="email"
-                                    type="email"
-                                    value={editingUser.email}
-                                    onChange={(e) =>
-                                        setEditingUser({...editingUser, email: e.target.value})
-                                    }
-                                    className="form-input"
-                                    required
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="country">Country</label>
-                                <select
-                                    id="country"
-                                    name="country"
-                                    required
-                                    value={editingUser.country}
-                                    onChange={(e) =>
-                                        setEditingUser({...editingUser, country: e.target.value})
-                                    }
-                                    className="form-input"
-                                    disabled={loading.countries}
-                                >
-                                    <option value="">Select a country</option>
-                                    {countries.map((country) => (
-                                        <option key={country.iso2} value={country.name}>
-                                            {country.name}
-                                        </option>
-                                    ))}
-                                </select>
-                                {loading.countries && (
-                                    <div className="mt-2 text-sm text-gray-500 flex items-center">
-                                        <Loader2 className="animate-spin h-4 w-4 mr-2"/>
-                                        Loading countries...
-                                    </div>
-                                )}
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="city">City</label>
-                                <select
-                                    id="city"
-                                    name="city"
-                                    required
-                                    value={editingUser.city}
-                                    onChange={(e) => setEditingUser({...editingUser, city: e.target.value})}
-                                    className="form-input"
-                                    disabled={!editingUser.country || loading.cities}
-                                >
-                                    <option value="">Select a city</option>
-                                    {cities.map((city) => (
-                                        <option key={city} value={city}>
-                                            {city}
-                                        </option>
-                                    ))}
-                                </select>
-                                {loading.cities && (
-                                    <div className="mt-2 text-sm text-gray-500 flex items-center">
-                                        <Loader2 className="animate-spin h-4 w-4 mr-2"/>
-                                        Loading cities...
-                                    </div>
-                                )}
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="address">Address</label>
-                                <input
-                                    id="address"
-                                    type="text"
-                                    value={editingUser.address}
-                                    onChange={(e) =>
-                                        setEditingUser({...editingUser, address: e.target.value})
-                                    }
-                                    className="form-input"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">
-                                    Role
-                                </label>
-                                <select
-                                    value={editingUser.role}
-                                    onChange={(e) =>
-                                        setEditingUser({
-                                            ...editingUser,
-                                            role: e.target.value as 'ROLE_USER' | 'ROLE_ADMIN',
-                                        })
-                                    }
-                                    className="form-input"
-                                >
-                                    <option value="ROLE_USER">User</option>
-                                    <option value="ROLE_ADMIN">Admin</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">
-                                    Status
-                                </label>
-                                <select
-                                    value={editingUser.enabled ? 'true' : 'false'}
-                                    onChange={(e) =>
-                                        setEditingUser({
-                                            ...editingUser,
-                                            enabled: e.target.value === 'true',
-                                        })
-                                    }
-                                    className="form-input"
-                                >
-                                    <option value="true">Enabled</option>
-                                    <option value="false">Disabled</option>
-                                </select>
-                            </div>
-                            <div className="flex justify-end gap-3 mt-6">
-                                <button
-                                    onClick={() => setEditingUser(null)}
-                                    className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    onClick={() =>
-                                        handleUpdateUser(editingUser.id, editingUser)
-                                    }
-                                    className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                >
-                                    Save Changes
-                                </button>
+            {editingUser &&
+                createPortal(
+                    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 z-50 flex items-center justify-center p-4">
+                        <div className="bg-white rounded-lg max-w-md w-full p-6">
+                            <h3 className="text-lg font-medium text-gray-900 mb-4">Edit User</h3>
+                            <div className="space-y-4">
+                                <div className="form-group">
+                                    <label htmlFor="firstName">First Name</label>
+                                    <input
+                                        id="firstName"
+                                        type="text"
+                                        value={editingUser.firstName}
+                                        onChange={(e) =>
+                                            setEditingUser({
+                                                ...editingUser,
+                                                firstName: e.target.value,
+                                            })
+                                        }
+                                        className="form-input"
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="lastName">Last Name</label>
+                                    <input
+                                        id="lastName"
+                                        type="text"
+                                        value={editingUser.lastName}
+                                        onChange={(e) =>
+                                            setEditingUser({
+                                                ...editingUser,
+                                                lastName: e.target.value,
+                                            })
+                                        }
+                                        className="form-input"
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="email">Email</label>
+                                    <input
+                                        id="email"
+                                        type="email"
+                                        value={editingUser.email}
+                                        onChange={(e) =>
+                                            setEditingUser({
+                                                ...editingUser,
+                                                email: e.target.value,
+                                            })
+                                        }
+                                        className="form-input"
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="country">Country</label>
+                                    <select
+                                        id="country"
+                                        name="country"
+                                        required
+                                        value={editingUser.country}
+                                        onChange={(e) =>
+                                            setEditingUser({
+                                                ...editingUser,
+                                                country: e.target.value,
+                                            })
+                                        }
+                                        className="form-input"
+                                        disabled={loading.countries}
+                                    >
+                                        <option value="">Select a country</option>
+                                        {countries.map((country) => (
+                                            <option key={country.iso3} value={country.name}>
+                                                {country.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    {loading.countries && (
+                                        <div className="mt-2 text-sm text-gray-500 flex items-center">
+                                            <Loader2 className="animate-spin h-4 w-4 mr-2" />
+                                            Loading countries...
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="city">City</label>
+                                    <select
+                                        id="city"
+                                        name="city"
+                                        required
+                                        value={editingUser.city}
+                                        onChange={(e) =>
+                                            setEditingUser({ ...editingUser, city: e.target.value })
+                                        }
+                                        className="form-input"
+                                        disabled={!editingUser.country || loading.cities}
+                                    >
+                                        <option value="">Select a city</option>
+                                        {cities.map((city) => (
+                                            <option key={city} value={city}>
+                                                {city}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    {loading.cities && (
+                                        <div className="mt-2 text-sm text-gray-500 flex items-center">
+                                            <Loader2 className="animate-spin h-4 w-4 mr-2" />
+                                            Loading cities...
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="address">Address</label>
+                                    <input
+                                        id="address"
+                                        type="text"
+                                        value={editingUser.address}
+                                        onChange={(e) =>
+                                            setEditingUser({
+                                                ...editingUser,
+                                                address: e.target.value,
+                                            })
+                                        }
+                                        className="form-input"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                        Role
+                                    </label>
+                                    <select
+                                        value={editingUser.role}
+                                        onChange={(e) =>
+                                            setEditingUser({
+                                                ...editingUser,
+                                                role: e.target.value as 'ROLE_USER' | 'ROLE_ADMIN',
+                                            })
+                                        }
+                                        className="form-input"
+                                    >
+                                        <option value="ROLE_USER">User</option>
+                                        <option value="ROLE_ADMIN">Admin</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                        Status
+                                    </label>
+                                    <select
+                                        value={editingUser.enabled ? 'true' : 'false'}
+                                        onChange={(e) =>
+                                            setEditingUser({
+                                                ...editingUser,
+                                                enabled: e.target.value === 'true',
+                                            })
+                                        }
+                                        className="form-input"
+                                    >
+                                        <option value="true">Enabled</option>
+                                        <option value="false">Disabled</option>
+                                    </select>
+                                </div>
+                                <div className="flex justify-end gap-3 mt-6">
+                                    <button
+                                        onClick={() => setEditingUser(null)}
+                                        className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        onClick={() =>
+                                            handleUpdateUser(editingUser.id, editingUser)
+                                        }
+                                        className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                    >
+                                        Save Changes
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                , document.body)}
+                    </div>,
+                    document.body
+                )}
         </div>
     )
 }

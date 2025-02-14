@@ -1,14 +1,12 @@
 import React, { useCallback } from 'react'
 import { Session, Program, Trainer } from '../../../types'
 import { Plus, Edit2, Trash2, Calendar, Clock, Users } from 'lucide-react'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
-import { format, parseISO } from 'date-fns'
 import { ProgramService } from '../../../services/ProgramService.ts'
 import { SessionService } from '../../../services/SessionService.ts'
 import { TrainerService } from '../../../services/TrainerService.ts'
 import { PaginationControls } from '../../../components/pagination/PaginationControls.tsx'
 import PopupModal from '../../../components/popup/PopUpModal.tsx'
+import { formatDateDefault, formatTimeDefault } from '../../../utils/time.utils.ts'
 
 export function AdminSession() {
     const [session, setSession] = React.useState<Session[]>([])
@@ -190,15 +188,14 @@ export function AdminSession() {
                                 <div className="space-y-3">
                                     <div className="flex items-center text-sm text-gray-600">
                                         <Calendar className="h-4 w-4 mr-2" />
-                                        <span>
-                                            {format(parseISO(schedule.date), 'MMMM d, yyyy')}
-                                        </span>
+                                        <span>{formatDateDefault(schedule.date)}</span>
                                     </div>
 
                                     <div className="flex items-center text-sm text-gray-600">
                                         <Clock className="h-4 w-4 mr-2" />
                                         <span>
-                                            {schedule.startTime} - {schedule.endTime}
+                                            {formatTimeDefault(schedule.startTime)} -{' '}
+                                            {formatTimeDefault(schedule.endTime)}
                                         </span>
                                     </div>
 
@@ -427,15 +424,18 @@ export function AdminSession() {
                             <div className="flex justify-end gap-3 mt-6">
                                 <button
                                     type="button"
-                                    onClick={() => {setIsAdding(false); setFormData({
-                                        program: null,
-                                        trainer: null,
-                                        date: '',
-                                        startTime: '',
-                                        endTime: '',
-                                        maxCapacity: 10,
-                                        currentBookings: 0,
-                                    })}}
+                                    onClick={() => {
+                                        setIsAdding(false)
+                                        setFormData({
+                                            program: null,
+                                            trainer: null,
+                                            date: '',
+                                            startTime: '',
+                                            endTime: '',
+                                            maxCapacity: 10,
+                                            currentBookings: 0,
+                                        })
+                                    }}
                                     className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                 >
                                     Cancel
@@ -489,7 +489,7 @@ export function AdminSession() {
                                 </select>
                             </div>
 
-                            <div  className="form-group">
+                            <div className="form-group">
                                 <label
                                     htmlFor="select-trainer-edit"
                                     className="block text-sm font-medium text-gray-700"

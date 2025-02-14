@@ -4,14 +4,12 @@ import { Program, Session } from '../types'
 import { Dumbbell, Users, Timer, Search, X } from 'lucide-react'
 import { useAuthStore } from '../store/authStore.ts'
 import { PaginationControls } from '../components/pagination/PaginationControls.tsx'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
-import { format, parseISO } from 'date-fns'
 import { ProgramService } from '../services/ProgramService.ts'
 import { SessionService } from '../services/SessionService.ts'
 import { BookingService } from '../services/BookingService.ts'
 import PopupModal from '../components/popup/PopUpModal.tsx'
 import '../styles/Programs.css'
+import { formatDateDefault, formatTimeDefault } from '../utils/time.utils.ts'
 
 export function Programs() {
     const [programs, setPrograms] = React.useState<Program[]>([])
@@ -194,10 +192,11 @@ export function Programs() {
                                     <div key={schedule.id} className="schedule-item">
                                         <div className="schedule-info">
                                             <div className="schedule-date">
-                                                {format(parseISO(schedule.date), 'MMMM d, yyyy')}
+                                                {formatDateDefault(schedule.date)}
                                             </div>
                                             <div className="schedule-time">
-                                                {schedule.startTime} - {schedule.endTime}
+                                                {formatTimeDefault(schedule.startTime)} -{' '}
+                                                {formatTimeDefault(schedule.endTime)}
                                             </div>
                                             <div className="schedule-capacity">
                                                 {schedule.currentBookings} / {schedule.maxCapacity}{' '}

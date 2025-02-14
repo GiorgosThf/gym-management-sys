@@ -6,7 +6,8 @@ import '../../../styles/Schedule.css'
 import { useAuthStore } from '../../../store/authStore.ts'
 import moment from 'moment/moment'
 import { BookingService } from '../../../services/BookingService.ts'
-import {CalendarCheck2, Clock, Dumbbell, User} from "lucide-react";
+import { CalendarCheck2, Clock, Dumbbell, User } from 'lucide-react'
+import { formatDateDefault, formatTimeDefault } from '../../../utils/time.utils.ts'
 const localizer = momentLocalizer(moment)
 
 export function UserSchedule() {
@@ -86,38 +87,40 @@ export function UserSchedule() {
                         {/* Session Info */}
                         <div className="text-gray-700 space-y-4">
                             <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-2 font-semibold text-gray-800">
-                        <Dumbbell className="h-5 w-5 text-indigo-600" /> Program:
-                    </span>
-                                <span className="text-indigo-600">{selectedSession.session.program?.name}</span>
+                                <span className="flex items-center gap-2 font-semibold text-gray-800">
+                                    <Dumbbell className="h-5 w-5 text-indigo-600" /> Program:
+                                </span>
+                                <span className="text-indigo-600">
+                                    {selectedSession.session.program?.name}
+                                </span>
                             </div>
 
                             <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-2 font-semibold text-gray-800">
-                        <CalendarCheck2 className="h-5 w-5 text-indigo-600" /> Date:
-                    </span>
-                                <span>{selectedSession.session.date}</span>
+                                <span className="flex items-center gap-2 font-semibold text-gray-800">
+                                    <CalendarCheck2 className="h-5 w-5 text-indigo-600" /> Date:
+                                </span>
+                                <span>{formatDateDefault(selectedSession.session.date)}</span>
                             </div>
 
                             <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-2 font-semibold text-gray-800">
-                        <Clock className="h-5 w-5 text-indigo-600" /> Time:
-                    </span>
+                                <span className="flex items-center gap-2 font-semibold text-gray-800">
+                                    <Clock className="h-5 w-5 text-indigo-600" /> Time:
+                                </span>
                                 <span>
-                        {selectedSession.session.startTime} - {selectedSession.session.endTime}
-                    </span>
+                                    {formatTimeDefault(selectedSession.session.startTime)} -{' '}
+                                    {formatTimeDefault(selectedSession.session.endTime)}
+                                </span>
                             </div>
 
                             <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-2 font-semibold text-gray-800">
-                        <User className="h-5 w-5 text-indigo-600" /> Trainer:
-                    </span>
+                                <span className="flex items-center gap-2 font-semibold text-gray-800">
+                                    <User className="h-5 w-5 text-indigo-600" /> Trainer:
+                                </span>
                                 <span>
-                        {selectedSession.session.trainer?.firstName} {selectedSession.session.trainer?.lastName}
-                    </span>
+                                    {selectedSession.session.trainer?.firstName}{' '}
+                                    {selectedSession.session.trainer?.lastName}
+                                </span>
                             </div>
-
-
                         </div>
 
                         {/* Action Buttons */}
