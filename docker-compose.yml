@@ -32,6 +32,7 @@ services:
       SPRING_DATASOURCE_USERNAME: gymuser
       SPRING_DATASOURCE_PASSWORD: gymsecret
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_PROFILES_ACTIVE: prod
     ports:
       - "8080:8080"
     networks:

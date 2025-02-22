@@ -38,7 +38,7 @@ public class RegistrationRequestService extends BaseServiceImpl<RegistrationRequ
 	 * Update by id registration request.
 	 *
 	 * @param id the id
-	 * @param approve the approve
+	 * @param approve the approval
 	 * @return the registration request
 	 */
 	public RegistrationRequest updateById(Long id, Boolean approve) {

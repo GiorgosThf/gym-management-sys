@@ -70,10 +70,17 @@ public class AuthService {
 	 */
 	public Map.Entry<User, String> login(String email, String password) {
 		final var foundUser = this.userRepository.findByEmail(email);
+		this.checkUser(foundUser);
 		this.checkPassword(password, foundUser.getPassword());
 		this.checkStatus(foundUser);
 
 		return Map.entry(foundUser, this.jwtUtils.generateToken(foundUser));
+	}
+
+	private void checkUser(final User foundUser) {
+		if (foundUser == null){
+			throw new ManagementSystemException("Invalid username or password");
+		}
 	}
 
 	private void checkPassword(final String givenPassword, final String foundUserPassword) {

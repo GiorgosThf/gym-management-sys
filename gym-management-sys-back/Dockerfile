@@ -16,7 +16,7 @@ WORKDIR /app
 # Copy the built jar from target folder to container
 COPY  --from=build app/target/*.jar /app/app.jar
 
-# Expose the port your Spring Boot app runs on (default is 8080)
+# Expose the port of the Spring Boot app
 EXPOSE 8080
 
 # Run the application

@@ -1,0 +1,3 @@
+CREATE DATABASE gymdb;
+CREATE ROLE gymuser LOGIN PASSWORD 'postgres';
+ALTER ROLE gymuser CREATEDB;
