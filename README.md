@@ -1,58 +1,64 @@
 # Gym Management System
 
-## Overview
-The Gym Management System is designed to efficiently manage gym operations, helping gym owners and staff streamline their tasks and improve customer satisfaction.
+## Architecture
+The Gym Management System is built using a microservices architecture, comprising multiple interconnected services, each with a defined responsibility. The components include a frontend user interface, a backend API, and a database.
 
-## Technology Stack
-- **Frontend:** React.js
-- **Backend:** Node.js, Express.js
-- **Database:** MongoDB
-- **Containerization:** Docker
+## API Endpoints
+The following endpoints are available for interacting with the Gym Management System:
+- `GET /api/members` - Retrieve a list of members
+- `POST /api/members` - Create a new member
+- `GET /api/classes` - Retrieve class information
+- `POST /api/classes` - Create a new class
+- (Add more endpoints as needed based on your implementation)
 
-## Project Structure
+## Database Schema
+The database for the Gym Management System utilizes the following tables:
+- **Members**
+  - id (int, primary key)
+  - name (varchar)
+  - membership_type (varchar)
+- **Classes**
+  - id (int, primary key)
+  - class_name (varchar)
+- (Add more tables as per your database structure)
+
+## Frontend Guide
+The frontend is built with React.js and can be started by running:
+```bash
+npm start
 ```
-├── client                # Frontend code
-├── server                # Backend code
-├── docker-compose.yml    # Docker compose file
-└── README.md            # Project documentation
+Ensure you have Node.js and npm installed.
+
+## Backend Guide
+The backend is implemented using Node.js and Express. To start the server, run:
+```bash
+npm start
 ```
+Ensure that you have installed all necessary dependencies.
 
-## Getting Started
-1. **Clone the repository:**  
-   ```bash
-   git clone https://github.com/GiorgosThf/gym-management-sys.git
-   cd gym-management-sys
-   ```
-2. **Setup Docker services:**  
-   ```bash
-   docker-compose up
-   ```
-3. **Access the application:**  
-   Visit `http://localhost:3000` in your web browser.
-
-## Docker Services
-The project uses Docker to run services smoothly. Ensure you have Docker installed, then use:
+## Docker Deployment
+To deploy the application via Docker, navigate to the project directory and run:
 ```bash
 docker-compose up
 ```
-This command starts the following services:
-- **Web Client:** Accessible on port 3000
-- **API Server:** Accessible on port 5000
-- **MongoDB:** Database service
-
-## Configuration
-Most configuration settings are available in the `config` directory. Ensure to adjust the connection strings and ports as needed.
 
 ## Features
-- **User Management:** Register, login, and manage gym members.
-- **Class Scheduling:** Create and manage workout schedules.
-- **Payments and Billing:** Process payments and manage members' billing details.
+- Membership management
+- Class scheduling
+- User authentication
+- Payment processing
+- (Add more features as per your implementation)
 
-## Contributing
-Feel free to contribute to this project! Please refer to the [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to contribute.
+## Troubleshooting
+If you encounter issues, consider the following:
+- Ensure that all services are running.
+- Check the logs for any errors.
+- Verify your database connection settings.
 
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-- Special thanks to the contributors and the community for their support!
+## Contributing Guidelines
+We welcome contributions! Please follow these steps:
+1. Fork the repository.
+2. Create a new branch: `git checkout -b feature-branch`.
+3. Commit your changes: `git commit -m "Add new feature"`.
+4. Push to the branch: `git push origin feature-branch`.
+5. Create a pull request.
